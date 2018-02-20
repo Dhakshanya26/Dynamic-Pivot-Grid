@@ -1,0 +1,152 @@
+﻿#dynamic_grid_container {
+    .link-without-span {
+        span {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    }
+
+    .dy-thumbnail {
+        max-height: 50px;
+        width: 80px;
+        padding: 3px;
+        border-radius: 15px;
+        border: 1px solid #ded9d9;
+        box-sizing: border-box;
+    }
+
+    .action {
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .panel-heading {
+        background-color: #5d6769;
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+
+            :hover {
+                color: #ffffff;
+                text-decoration: underline;
+                font-size: 13px;
+            }
+
+            :active {
+                color: #ffffff;
+            }
+
+            :focus {
+                color: #ffffff;
+            }
+        }
+    }
+
+    .page-header {
+        margin-top: 0px;
+    }
+
+    .result-grid-error-message {
+        padding: 10px;
+    }
+
+
+    .dynamic-grid-items-row:nth-of-type(odd) {
+        background-color: #ffffff;
+    }
+
+    .dynamic-grid-items-row:nth-of-type(even) {
+        background-color: #f9f9f9;
+    }
+
+    .pagination {
+        margin: 0 0;
+    }
+
+    .panel-footer {
+        padding: 0px 0px;
+        height: 35px;
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #5d6769;
+            border-color: #5d6769;
+        }
+    }
+    /*a:focus,#dynamic_grid_container a:hover {
+        color: #23527c;
+        text-decoration: underline;
+        font-size: 13px;
+    }*/
+    /*a:active {
+        color: #333333;
+    }*/
+    .sort-both {
+        background-image: url('../../../Content/images/Background/sort-both.png');
+        background-size: 15px 15px;
+        background-repeat: no-repeat;
+        background-position: right;
+    }
+
+    .sort-asc {
+        background-image: url('../../../Content/images/Background/sort-asc.png');
+        background-size: 15px 15px;
+        background-repeat: no-repeat;
+        background-position: right;
+    }
+
+    .sort-desc {
+        background-image: url('../../../Content/images/Background/sort-desc.png');
+        background-size: 15px 15px;
+        background-repeat: no-repeat;
+        background-position: right;
+    }
+
+    .no-records-found-container {
+        padding: 20px;
+        font-weight: bolder;
+    }
+
+    .custom-search-input {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+
+
+    .dynamic-grid-body-panel {
+        padding-top: 0px;
+        padding-bottom: 10px;
+    }
+
+    .dynamic-grid-items-row {
+        min-height: 30px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
+
+.loading-icon-wrapper {
+    margin: 0px;
+    padding: 0px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(102, 102, 102);
+    z-index: 30001;
+    opacity: 0.8;
+}
+
+.loading-icon {
+    position: absolute;
+    color: White;
+    top: 50%;
+    left: 45%;
+}

@@ -1,0 +1,265 @@
+﻿
+<h2>Pivot Table</h2>
+
+
+@*Starts - Sorting*@
+<div class="row">
+    <div class="sort-wrapper">
+        <div class="form-inline">
+            <label for="cbColumn">
+                <input type="checkbox" class="checkbox" id="cbColumn" data-bind="checked: sortByColumn,click: sortDataGrid" />
+              <span data-bind="text:' Sort By '+columnHeading"></span>
+            </label>
+        </div>
+        <div class="form-inline">
+            <label for="cbRow">
+                <input type="checkbox" class="checkbox" id="cbRow" data-bind="checked: sortByRow,click: sortDataGrid" />
+           <span data-bind="text:' Sort By '+rowHeading"></span>
+            </label>
+        </div>
+        <div class="form-inline">
+        @*Starts - Search Box*@
+
+            <div class="row" data-bind="visible: showSearchByBox()">
+                <div class="col-lg-4 custom-search-input ">
+                    <div class="row">
+                        <div class="input-group col-lg-12">
+                            <input type="text" class="form-control" placeholder="Search" data-bind="value: searchByValue" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" data-bind="click: searchByButtonClick"><span class="glyphicon glyphicon-search"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Ends - Search Box*@
+    </div>
+</div>
+@*Ends - Sorting*@
+
+@*Start - Pivot Table - Sorting*@
+<!--ko if: gridRows == null  || gridRows().length<=0 -->
+<div class="no-records-found" >
+    No Records found
+</div>
+<!--/ko-->
+<!--ko if: gridRows != null && gridRows().length>0 -->
+<table id="pivote-table">
+    <thead>
+    <tr>
+        <!--ko with: gridColumns -->
+        <th class="tb-column-heading">
+            <span data-bind="text: Heading"></span>
+        </th>
+
+        <!-- ko foreach: $data.Columns -->
+        <th class="tb-column-data">
+            <span data-bind="text: $data"></span>
+        </th>
+        <!-- /ko -->
+        <!-- /ko -->
+    </tr>
+    </thead>
+    <tbody>
+        <!--ko with:gridRows-->
+        <!-- ko foreach: $data -->
+        <tr>
+            <th class="tb-row-heading">
+                <span data-bind="text: Heading"></span>
+            </th>
+            <!-- ko foreach: $data.DataModels -->
+            <!--ko if: $data.Id == 0-->
+            <td class="tb-row-data" data-bind="css:$data.CssClass">
+                <span  data-bind="text:  $data.Name"></span>
+            </td>
+            <!--/ko-->
+            <!--ko if: $data.Id != 0-->
+            <td class="tb-row-data" data-bind="css:$data.CssClass,click: $root.dataClickEvent.bind($data,$parents[0].Heading)">
+                <span  data-bind="text:  $data.Name"></span>
+               
+            </td>
+            <!--/ko-->
+            <!-- /ko -->
+
+        </tr>
+        <!-- /ko -->
+        <!-- /ko -->
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="7">
+                <div class="panel-footer" data-bind="visible: !showNoRecordsFound()" style="display: none">
+                    <div class="text-left">
+                        <ul class="pagination">
+                            <li><a href="#" data-bind="click: loadFirstPage,disableClick: !(pageNumber() > 1 && maxPages() != 1)">First</a></li>
+                            <li><a href="#" data-bind="click: loadPreviousPage,visible: pageNumber() > 1 && maxPages() != 1,text:pageNumber()-1"></a></li>
+                            <li class="active"><span data-bind="text: 'Page ' +pageNumber() + ' of ' + maxPages() "></span></li>
+                            <li><a href="#" data-bind="click: loadNextPage,visible: pageNumber() < maxPages(),text:pageNumber()+1"></a></li>
+                            <li><a href="#" data-bind="click: loadLastPage,disableClick: !(pageNumber() < maxPages()) ">Last</a></li>
+                        </ul>
+                    </div>
+
+                   
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<!--/ko-->
+@*End - Pivot Table - Sorting*@
+
+@*Start - Pivot Table - Loading*@
+<div id="divLoading" data-bind="visible: showLoadingIcon()" class="loading-icon-wrapper" style="display: none;">
+    <p class="loading-icon">
+        Loading, please wait...
+        <img src="~/Content/progress.gif">
+    </p>
+</div>
+@*End - Pivot Table - Sorting*@
+<script>
+    $(function () {
+        ko.bindingHandlers.disableClick = {
+            init: function (element, valueAccessor) {
+                $(element).click(function (evt) {
+                    if (valueAccessor())
+                        evt.preventDefault();
+                });
+            },
+            update: function (element, valueAccessor) {
+                var value = ko.utils.unwrapObservable(valueAccessor());
+                ko.bindingHandlers.css.update(element, function () { return { disabled_anchor: value }; });
+            }
+        };
+    });
+</script>
+<style>
+    #pivote-wrapper {
+        overflow-x: scroll;
+    }
+
+        #pivote-wrapper::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+
+        #pivote-wrapper::-webkit-scrollbar {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+
+        #pivote-wrapper::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+        
+     input, select, textarea {
+         max-width: 100%;
+     }
+    
+    .sort-wrapper {
+        display: inline-flex;
+    }
+
+    .no-records-found {
+        padding: 15px;
+        border: 1px solid #cccccc;
+        color: red;
+    }
+
+    .sort-wrapper > div {
+        padding: 15px;
+    }
+
+    .form-group label {
+        display: inline-flex;
+    }
+
+    .form-group span {
+        padding-left: 5px;
+    }
+
+    .panel-footer {
+        padding: 0px 15px;
+    }
+
+    tfoot tr td {
+        border: 1px solid #d8cdcd;
+        text-align: center;
+    }
+
+    .tb-column-heading, .tb-column-data {
+        border: 1px solid #b9b5b5;
+        background-color: #c3c3c3;
+    }
+
+    .tb-row-heading {
+        border: 1px solid #b9b5b5;
+        background-color: #c3c3c3;
+    }
+
+    .tb-row-data {
+        border: 1px solid #dadada;
+    }
+
+    th {
+        border: 2px dotted #999;
+        padding: 4px;
+        width: 130px;
+        height: 50px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .data-partial, .data-filled, .data-tobefilled {
+        cursor: pointer;
+    }
+    .tb-column-data, .tb-row-heading, .tb-column-heading {
+        font-size: 10px;
+        min-width: 80px;
+    }
+    .tb-row-heading, .tb-column-heading {
+        text-align: left;
+    }
+    
+    .data-filled {
+        background-image: linear-gradient(-45deg, green 25%, transparent 25%, transparent 50%, green 50%, green 75%, transparent 75%, transparent);
+        background-size: 4px 4px;
+    }
+    .data-partail {
+        background-image: linear-gradient(-45deg, yellow 25%, transparent 25%, transparent 50%, yellow 50%, yellow 75%, transparent 75%, transparent);
+        background-size: 4px 4px;
+    }
+    .data-tobefilled {
+        background-image: linear-gradient(-45deg, red 25%, transparent 25%, transparent 50%, #ec0c0c 50%, red 75%, transparent 75%, transparent);
+        background-size: 4px 4px;
+
+    }
+    
+    .no-data {
+        background-size: 4px 4px;
+    }
+    td {
+        border: 2px solid black;
+        text-align: center;
+    }
+
+    h2 {
+        margin: 10px 0 20px;
+        text-align: center;
+        border-bottom: 2px solid #333;
+    }
+
+    body {
+        font-family: helvetica;
+    }
+
+    table.graph td {
+        border: 0;
+    }
+
+    strong {
+        font-weight: bold;
+    }
+</style>
